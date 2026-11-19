@@ -1,0 +1,20 @@
+RelojFix v2: corrige persist.switch_mishow_oob_mode:
+  - al arrancar el reloj (BOOT_COMPLETED)
+  - todos los dias a las 7:58 AM (alarma exacta que se reprograma sola)
+  - al abrir la app a mano (solo para probar)
+
+No manda broadcasts a otras apps. No toca com.xiaomi.miwear.mishow.
+
+INSTALAR / ACTUALIZAR (si ya tenias la v1, desinstala primero):
+  adb uninstall com.relojfix
+  adb install app-debug.apk
+  adb shell pm grant com.relojfix android.permission.WRITE_SECURE_SETTINGS
+  adb shell appops set com.relojfix SCHEDULE_EXACT_ALARM allow
+  adb shell am start -n com.relojfix/.MainActivity
+
+COMPROBAR:
+  logcat -d | grep -i RelojFix
+  settings get global persist.switch_mishow_oob_mode   (debe dar 0)
+
+La linea "Proxima revision programada para ..." en el log confirma
+la hora exacta en la que correra la siguiente alarma de las 7:58.
